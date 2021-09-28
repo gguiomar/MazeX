@@ -11,13 +11,17 @@
 
 \input{extra_pkgs}
 
-\title{Feature compression for Meta-Reinforcement}
+\title{Feature Learning with Reward Sensitive Representations}
 
 \author{
   Gonçalo Guiomar \\
   %Department of Computer Science \\
   %University of Toronto \\
   %\href{mailto:bojian@cs.toronto.edu}{bojian@cs.toronto.edu}
+  \And
+  Tiago Costa
+  \And
+  Margarida Sousa
 }
 
 \begin{document}
@@ -25,33 +29,90 @@
 \maketitle
 
 \begin{abstract}
-  asdasda
+  ...
 \end{abstract}
 
 \section{Introduction}
 
-Basic points to put here
+Basic points to put here:
 
 \begin{itemize}
   \item Exploration of high-dimensional state-spaces is costly
   \item Having a compact representation is necessary to efficiently transverse environments
-  \item Reward signals are not symmetric in frequency: positive rewards are sparse and localized and negative rewards are diffused
-  \item The brain processes positive and negative reward information through separate pathways
+  \item Reward signals in nature are not symmetric in frequency of occurrence: positive rewards are sparse and localized and negative rewards are diffused
+  \item These signals are also contextual; animals seem to bootstrap policies of new environments on what has been learned in other environments
+  \item Besides, the brain processes positive and negative reward information through separate pathways
   \item How can we combine this into a more efficient RL algorithm?
-  \item We combine graph representation learning techniques with reward sensitivity functions in order to speed up learning
+  \item We'll attempt to define a reward and context sensitive algorithm that learns policies over a set of environments
+  \item We combine graph representation learning techniques with reward sensitivity functions in order to speed up learning across different MDPs
 \end{itemize}
 
 \section{Background}
+% tano & dayan sensitivity 
 
-\section{Representation Projection through state embeddings}
+\section{Learning the State Embeddings}
 
-Potential update rules to be applied to this:
+% node2vec better than laplacian and other embedding methods
+% laura toni and doina precup
+% only spatial, no action related information
+% might try to do for state-action value function after
 
 
-\section{Splitting Representations}
-\subsection{Successor Features}
-\subsection{Reward sensitivities}
-\subsection{Combining multiple representations}
+\section{Reward Sensitive Representations}
+% tano & dayan sensitivity 
+
+\subsection{Context-dependent State-Value Functions}
+
+% take some motivation from state2vec - why is this better etc
+% justify in the background section 
+As agents experience environments, the probability of observing novel states 
+is conditioned on the underlying Markov Decision Process (MDP). The observation
+of certain states is thus contextual to the observation of past and future states.
+
+We begin by defining a state value function that takes into account the proximity 
+of the surrounding states as proxy for calculating the values; in the usual Function Approximation
+formalist [REF-Sutton] the state-value function is given as a linear sum over feature vectors i.e.
+
+\begin{equation}
+  V(s_t) = \sum_i w_i \phi_i(s_t)
+\end{equation}
+
+where $\phi_i$ is the i-th component of the feature vector corresponding to state $s_t$.
+
+Although feature vectors allow for the compression of state relevant information in a way that 
+allows for very high-dimensional state-spaces to be explored, we lose a bit of a notion of context
+for each state; to which extent is the state that I'm in related with states that have a similar representation? 
+and furthermore, to which extent should the information gathered in surrounding states affect the representation of the current state.
+
+To explore this idea we define a novel value function as dependent on the dot product of the state embeddings in 
+a surrounding ball of size $\epsilon$ given by a weight metric function $\Gamma^\epsilon(s_t)$ so that the 
+state value function is now given by 
+
+\begin{equation}
+  V^h(s_t) = \sum_{i} \Gamma^\epsilon(s_t)_i \langle\phi_i,\mathbf{w}^h\rangle
+\end{equation}
+
+with $\langle\phi_i,\mathbf{w}^h\rangle$ the inner product between the weights $\mathbf{w}$ and
+
+\begin{equation}
+\Gamma^\epsilon(s_t)_i = 
+\begin{cases}
+    0 & \text{if } ||\phi(s_t)-\phi_i||>\epsilon\\
+     \frac{1}{1+\beta_V ||\phi(s_t)-\phi_i||},         & \text{otherwise}
+\end{cases}
+\end{equation}
+
+We'll be trying to minimize the Reward Prediction Error (RPE) with rewards filtered by a function $f^h(\delta_t)$ i.e.
+
+\begin{equation}
+  \delta^h_t = f^h(r_t) + \gamma V^h(s_{t+1})-V^h(s_t)
+\end{equation}
+
+and the loss function for each RPE function is given by
+
+\begin{equation}
+  \mathcal{L}^h = ||\delta^h_t||^2
+\end{equation}
 
 
 \section{Experiments}
