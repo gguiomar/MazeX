@@ -92,7 +92,7 @@ state value function is now given by
   V^h(s_t) = \sum_{i} \Gamma^\epsilon(s_t)_i \langle\phi_i,\mathbf{w}^h\rangle
 \end{equation}
 
-with $\langle\phi_i,\mathbf{w}^h\rangle$ the inner product between the weights $\mathbf{w}$ and
+with $\langle\phi_i,\mathbf{w}^h\rangle$ the inner product between the weights $\mathbf{w}$ and the embeddings of each state $\phi_i$
 
 \begin{equation}
 \Gamma^\epsilon(s_t)_i = 
@@ -114,6 +114,44 @@ and the loss function for each RPE function is given by
   \mathcal{L}^h = ||\delta^h_t||^2
 \end{equation}
 
+We can learn the weights $\mathbf{w}$ by the usual gradient descent rule
+
+\begin{equation}
+  \frac{\partial \mathcal{L^h}}{\partial w^h_j} = 2 \delta^h_t\frac{\partial \delta^h_t}{\partial w^h_j}
+\end{equation}
+
+where the latter partial derivative term can be expanded thus 
+
+\begin{equation}
+  \frac{\partial \delta_t}{\partial w^h_j} = \gamma\frac{\partial V^h(s_{t+1})}{\partial w^h_j} - \frac{\partial V^h(s_{t})}{\partial w^h_j} =   \sum_{i} \big ( \gamma \Gamma^\epsilon(s_{t+1})_i \phi_i-\Gamma^\epsilon(s_t)_i\phi_i \big )
+\end{equation}
+
+which will give us a final update rule for each weight $w_j$ 
+
+\begin{equation}
+  w_j \leftarrow w_j + \alpha^h 2 \delta^h_t\sum_{i} \big ( \gamma \Gamma^\epsilon(s_{t+1})_i \phi_i-\Gamma^\epsilon(s_t)_i\phi_i \big )
+\end{equation}
+
+\subsection{Policy}
+
+As a first approach we can try to model the policy with an action preference formalism that takes the RPEs of each channel $h$
+and feeds it into a corresponding preference 
+
+\begin{equation}
+  A^h(s,a) \leftarrow A^h(s,a) + \alpha \delta^h_t
+\end{equation}
+
+where we sum all channels
+
+\begin{equation}
+  A^T(s,a) = \sum_h \theta_h A^h(s,a)
+\end{equation}
+
+and define our policy through a softmax over the total
+
+\begin{equation}
+  \pi(a|s, \theta) = \frac{e^{\sum_h A^T(s,a)}}{\sum_a A^T(s,a)}
+\end{equation}
 
 \section{Experiments}
 

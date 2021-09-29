@@ -3,5 +3,6 @@
 \BOOKMARK [1][-]{section.3}{Learning the State Embeddings}{}% 3
 \BOOKMARK [1][-]{section.4}{Reward Sensitive Representations}{}% 4
 \BOOKMARK [2][-]{subsection.4.1}{Context-dependent State-Value Functions}{section.4}% 5
-\BOOKMARK [1][-]{section.5}{Experiments}{}% 6
-\BOOKMARK [1][-]{section.6}{Conclusion}{}% 7
+\BOOKMARK [2][-]{subsection.4.2}{Policy}{section.4}% 6
+\BOOKMARK [1][-]{section.5}{Experiments}{}% 7
+\BOOKMARK [1][-]{section.6}{Conclusion}{}% 8
