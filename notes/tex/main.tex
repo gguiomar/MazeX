@@ -11,7 +11,7 @@
 
 \input{extra_pkgs}
 
-\title{Feature Learning with Reward Sensitive Representations}
+\title{Contextual Learning with Reward Sensitive Representations}
 
 \author{
   Gonçalo Guiomar \\
@@ -57,39 +57,29 @@ Basic points to put here:
 % only spatial, no action related information
 % might try to do for state-action value function after
 
-
-\section{Reward Sensitive Representations}
+\newpage
+\section{Contextual Learning}
 % tano & dayan sensitivity 
+% remember that context is not only space but also reward valence information!
 
-\subsection{Context-dependent State-Value Functions}
-
-% take some motivation from state2vec - why is this better etc
-% justify in the background section 
-As agents experience environments, the probability of observing novel states 
-is conditioned on the underlying Markov Decision Process (MDP). The observation
-of certain states is thus contextual to the observation of past and future states.
-
-We begin by defining a state value function that takes into account the proximity 
-of the surrounding states as proxy for calculating the values; in the usual Function Approximation
-formalist [REF-Sutton] the state-value function is given as a linear sum over feature vectors i.e.
+We begin by defining a state value function that takes into account the sensitivity to certain 
+reward ranges, as in [REF-Tano] we write 
 
 \begin{equation}
-  V(s_t) = \sum_i w_i \phi_i(s_t)
+  V^h(s_t) = \mathbf{E}^\pi \big[  \sum_\tau^\infty \gamma^\tau f^h(r_{t+\tau}) \big ]
 \end{equation}
-
-where $\phi_i$ is the i-th component of the feature vector corresponding to state $s_t$.
 
 Although feature vectors allow for the compression of state relevant information in a way that 
 allows for very high-dimensional state-spaces to be explored, we lose a bit of a notion of context
-for each state; to which extent is the state that I'm in related with states that have a similar representation? 
-and furthermore, to which extent should the information gathered in surrounding states affect the representation of the current state.
+for each state; to which extent is the state that the agent is in at time $t$ is related contextually 
+with states that have a similar representation? 
 
 To explore this idea we define a novel value function as dependent on the dot product of the state embeddings in 
-a surrounding ball of size $\epsilon$ given by a weight metric function $\Gamma^\epsilon(s_t)$ so that the 
-state value function is now given by 
+a surrounding ball of size $\epsilon$ by weighting the surrounding weights with a function $\Gamma^\epsilon(s_t)$
+
 
 \begin{equation}
-  V^h(s_t) = \sum_{i} \Gamma^\epsilon(s_t)_i \langle\phi_i,\mathbf{w}^h\rangle
+  \hat{V}^h(s_t) = \sum_{i} \Gamma^\epsilon(s_t)_i \langle\phi_i,\mathbf{w}^h\rangle
 \end{equation}
 
 with $\langle\phi_i,\mathbf{w}^h\rangle$ the inner product between the weights $\mathbf{w}$ and the embeddings of each state $\phi_i$
@@ -102,34 +92,47 @@ with $\langle\phi_i,\mathbf{w}^h\rangle$ the inner product between the weights $
 \end{cases}
 \end{equation}
 
-We'll be trying to minimize the Reward Prediction Error (RPE) with rewards filtered by a function $f^h(\delta_t)$ i.e.
-
-\begin{equation}
-  \delta^h_t = f^h(r_t) + \gamma V^h(s_{t+1})-V^h(s_t)
-\end{equation}
-
 and the loss function for each RPE function is given by
 
 \begin{equation}
-  \mathcal{L}^h = ||\delta^h_t||^2
+  \mathcal{L}^h = ||V^h(s_t) - \hat{V}^h(s_t)||^2
+\end{equation}
+
+which if we take the following expansion
+
+\begin{equation}
+  V^h(s_t) = \mathbf{E}^\pi \big[ f^h(r_{t}) + \gamma \sum_{\tau} \gamma^{\tau} f^h(r_{t+1+\tau})\big ] = f^h(r_t) + V^h(s_{t+1})
+\end{equation}
+
+allows us to write the following objective function
+
+\begin{equation}
+  \mathcal{L}^h = ||f^h(r_t) + \gamma V^h(s_{t+1}) - \hat{V}^h(s_t)||^2.
+\end{equation}
+
+which implies new definition for the RPE 
+
+\begin{equation}
+  \delta^h_t = f^h(r_t) + \gamma V^h(s_{t+1})-\hat{V}^h(s_t).
 \end{equation}
 
 We can learn the weights $\mathbf{w}$ by the usual gradient descent rule
 
 \begin{equation}
-  \frac{\partial \mathcal{L^h}}{\partial w^h_j} = 2 \delta^h_t\frac{\partial \delta^h_t}{\partial w^h_j}
+  \frac{\partial \mathcal{L}^h}{\partial w^h_j} = 2 \delta^h_t\frac{\partial \delta^h_t}{\partial w^h_j}
 \end{equation}
 
-where the latter partial derivative term can be expanded thus 
+where in calculating the latter partial derivative we need to take into account that only the approximated 
+value function can be differentiated in respect to $\mathbf{w}$ so
 
 \begin{equation}
-  \frac{\partial \delta_t}{\partial w^h_j} = \gamma\frac{\partial V^h(s_{t+1})}{\partial w^h_j} - \frac{\partial V^h(s_{t})}{\partial w^h_j} =   \sum_{i} \big ( \gamma \Gamma^\epsilon(s_{t+1})_i \phi_i-\Gamma^\epsilon(s_t)_i\phi_i \big )
+  \frac{\partial \delta^h_t}{\partial w^h_j} = - \frac{\partial \hat{V}^h(s_{t})}{\partial w^h_j} =   -\sum_{i} \Gamma^\epsilon(s_t)_i\phi_i
 \end{equation}
 
 which will give us a final update rule for each weight $w_j$ 
 
 \begin{equation}
-  w_j \leftarrow w_j + \alpha^h 2 \delta^h_t\sum_{i} \big ( \gamma \Gamma^\epsilon(s_{t+1})_i \phi_i-\Gamma^\epsilon(s_t)_i\phi_i \big )
+  w_j \leftarrow w_j - \alpha^h 2 \delta^h_t\sum_{i}\Gamma^\epsilon(s_t)_i\phi_i
 \end{equation}
 
 \subsection{Policy}
