@@ -48,14 +48,23 @@ Basic points to put here:
 \end{itemize}
 
 \section{Background}
-% tano & dayan sensitivity 
+% biological background
+  % what problem are trying to solve?
+% collins, tano & dayan sensitivity
+% laura toni graphs
+% stachenfeld - SR, GNNs
 
 \section{Feature Representations over Graphs}
 
-% node2vec better than laplacian and other embedding methods
-% laura toni and doina precup
-% only spatial, no action related information
-% might try to do for state-action value function after
+% node2vec better than laplacian and other embedding methods (?)
+% laura toni, doina precup
+  % only spatial, no action related information
+% introduce node2vec algo
+% what about successor representation
+  % it's more directly linked with data
+  % it's TD algorithm which can be learned in real time
+  % what happens if we do the eigenvectors of the SR on a maze?
+
 
 \newpage
 \section{Contextual Learning}
@@ -132,7 +141,7 @@ value function can be differentiated in respect to $\mathbf{w}$ so
 which will give us a final update rule for each weight $w_j$ 
 
 \begin{equation}
-  w_j \leftarrow w_j - \alpha^h 2 \delta^h_t\sum_{i}\Gamma^\epsilon(s_t)_i\phi_i
+  w^h_j \leftarrow w^h_j - \alpha^h 2 \delta^h_t\sum_{i}\Gamma^\epsilon(s_t)_i\phi_i
 \end{equation}
 
 \subsection{Policy}

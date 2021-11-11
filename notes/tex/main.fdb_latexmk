@@ -1,7 +1,7 @@
 # Fdb version 3
-["pdflatex"] 1632939159 "/Users/indp/Dropbox/phd/code/MazeX/notes/tex/main.tex" "/Users/indp/Dropbox/phd/code/MazeX/notes/tex/main.pdf" "main" 1632939160
-  "/Users/indp/Dropbox/phd/code/MazeX/notes/tex/main.aux" 1632939160 1286 9c9eb94eb7fb5d511e4fc02a277fa497 ""
-  "/Users/indp/Dropbox/phd/code/MazeX/notes/tex/main.tex" 1632939157 5264 b85a7d419d612518a07ea7753d40f6fc ""
+["pdflatex"] 1636398565 "/Users/indp/Dropbox/phd/code/MazeX/notes/tex/main.tex" "/Users/indp/Dropbox/phd/code/MazeX/notes/tex/main.pdf" "main" 1636398567
+  "/Users/indp/Dropbox/phd/code/MazeX/notes/tex/main.aux" 1636398566 1286 9c9eb94eb7fb5d511e4fc02a277fa497 ""
+  "/Users/indp/Dropbox/phd/code/MazeX/notes/tex/main.tex" 1636398566 5555 0a7c9457b15da575cc3323cd999093ac ""
   "/usr/local/texlive/2016/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/local/texlive/2016/texmf-dist/fonts/map/fontname/texfonts.map" 1272929888 3287 e6b82fe08f5336d4d5ebc73fb1152e87 ""
   "/usr/local/texlive/2016/texmf-dist/fonts/tfm/adobe/symbol/psyr.tfm" 1136768653 1408 5937f58aa508ea2cea4901c07d10f5fe ""
@@ -111,15 +111,15 @@
   "/usr/local/texlive/2016/texmf-var/web2c/pdftex/pdflatex.fmt" 1484673267 3873397 3c08373ab31b2638df013e38701b9b4e ""
   "/usr/local/texlive/2016/texmf.cnf" 1463979140 577 2938757e76f31531e65cc647e3507693 ""
   "extra_pkgs.tex" 1621108192 3128 2a11d14b88db0aa2af8c366ff4b111b6 ""
-  "main.aux" 1632939160 1286 9c9eb94eb7fb5d511e4fc02a277fa497 ""
-  "main.out" 1632939160 362 805d0203c96054888bbfbeb54e0aff94 ""
-  "main.tex" 1632939157 5264 b85a7d419d612518a07ea7753d40f6fc ""
+  "main.aux" 1636398566 1286 9c9eb94eb7fb5d511e4fc02a277fa497 ""
+  "main.out" 1636398566 362 805d0203c96054888bbfbeb54e0aff94 ""
+  "main.tex" 1636398566 5555 0a7c9457b15da575cc3323cd999093ac ""
   "neurips.sty" 1621108192 11562 3fea7dcad916f1b06e2e2bea360f5fd2 ""
   "xurl.sty" 1621108192 4662 bd4dddc91c615ba08c4fa6618ec20bef ""
   (generated)
+  "main.pdf"
   "/Users/indp/Dropbox/phd/code/MazeX/notes/tex/main.pdf"
-  "main.out"
   "/Users/indp/Dropbox/phd/code/MazeX/notes/tex/main.log"
+  "main.out"
   "main.aux"
   "main.log"
-  "main.pdf"
